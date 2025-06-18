@@ -21,3 +21,25 @@ Input: nums1 = [3, 4, 6, 7, 9, 9], nums2 = [1, 5, 7, 8, 8]
 Output: [1, 3, 4, 5, 6, 7, 8, 9]
 
 Explanation: The element 7 is common to both, 3, 4, 6, 9 are from nums1 and 1, 5, 8 is from nums2
+
+class Solution {
+public:
+    vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        set<int>st;
+        for (int i = 0; i<n1;i++){
+            st.insert(nums1[i]);
+        }
+
+        for (int i =0; i<n2;i++){
+            st.insert(nums2[i]);
+        }
+        
+        vector<int>temp;
+        for(auto it:st){
+            temp.push_back(it);
+        }
+        return temp;
+    }
+};
