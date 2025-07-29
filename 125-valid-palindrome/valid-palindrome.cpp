@@ -1,26 +1,25 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        // Create a cleaned string with only alphanumeric characters in lowercase
         string cleaned = "";
+
+        // Step 1: Clean the string (only lowercase alphanumeric)
         for (char c : s) {
             if (isalnum(c)) {
                 cleaned += tolower(c);
             }
         }
-        
-        // Compare string with its reverse using two pointers
-        int left = 0;
-        int right = cleaned.length() - 1;
-        
-        while (left < right) {
-            if (cleaned[left] != cleaned[right]) {
-                return false;
-            }
-            left++;
-            right--;
+
+        // Step 2: Reverse the cleaned string using a vector<char>
+        vector<char> reversed;
+        for (int i = cleaned.size() - 1; i >= 0; --i) {
+            reversed.push_back(cleaned[i]);
         }
-        
-        return true;
+
+        // Step 3: Convert vector<char> to string
+        string reversedStr(reversed.begin(), reversed.end());
+
+        // Step 4: Compare original cleaned string with reversed string
+        return cleaned == reversedStr;
     }
 };
