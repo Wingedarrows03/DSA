@@ -1,25 +1,32 @@
 class Solution {
 public:
+bool AlphaNum(char c)
+        {
+            return(c>='A'&& c<='Z')||
+            (c>='a'&& c<='z')||
+            (c>='0'&& c<='9');
+
+        }
     bool isPalindrome(string s) {
-        string cleaned = "";
-
-        // Step 1: Clean the string (only lowercase alphanumeric)
-        for (char c : s) {
-            if (isalnum(c)) {
-                cleaned += tolower(c);
+    
+        int n = s.size();
+        int l = 0;// left pointer
+        int r = n-1; // right pointer 
+        while(l<r){
+            while (l<r && !AlphaNum(s[l])){
+                l++;
             }
+
+            while(l<r && !AlphaNum(s[r])){
+                r--;
+            }
+
+            if(tolower(s[l]) != tolower(s[r])){
+                return false;
+            }
+            l++; r--;
+
         }
-
-        // Step 2: Reverse the cleaned string using a vector<char>
-        vector<char> reversed;
-        for (int i = cleaned.size() - 1; i >= 0; --i) {
-            reversed.push_back(cleaned[i]);
-        }
-
-        // Step 3: Convert vector<char> to string
-        string reversedStr(reversed.begin(), reversed.end());
-
-        // Step 4: Compare original cleaned string with reversed string
-        return cleaned == reversedStr;
+        return true;
     }
 };
