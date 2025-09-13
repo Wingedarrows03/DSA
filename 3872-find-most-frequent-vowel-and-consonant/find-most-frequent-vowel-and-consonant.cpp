@@ -1,25 +1,29 @@
 class Solution {
 public:
     int maxFreqSum(string s) {
-        vector<int> freq(26, 0);
-        
+        int n = s.size();
+        unordered_map<char, int> mpp; // fixed typo
+
+        // Count frequency of each character
         for (char c : s) {
-            freq[c - 'a']++;
+            mpp[c]++;
         }
-        
-        int maxVowelFreq = 0;
-        int maxConsonantFreq = 0;
-        
-        for (int i = 0; i < 26; ++i) {
-            char c = 'a' + i;
-            
+
+        int maxVowel = 0;
+        int maxConsonant = 0;
+
+        // Find max frequency for vowels and consonants
+        for (auto &p : mpp) {
+            char c = p.first;
+            int freq = p.second;
+
             if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-                maxVowelFreq = max(maxVowelFreq, freq[i]);
+                maxVowel = max(maxVowel, freq);
             } else {
-                maxConsonantFreq = max(maxConsonantFreq, freq[i]);
+                maxConsonant = max(maxConsonant, freq);
             }
         }
-        
-        return maxVowelFreq + maxConsonantFreq;
+
+        return maxVowel + maxConsonant;
     }
 };
