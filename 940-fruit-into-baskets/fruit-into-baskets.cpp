@@ -6,13 +6,11 @@ public:
         int right = 0;
         int maxlen = 0;
 
-        unordered_map<int, int> freq; // frequency map
+        unordered_map<int,int> freq;
 
         while (right < n) {
-            // expand window
             freq[fruits[right]]++;
 
-            // shrink window if more than 2 fruit types
             while (freq.size() > 2) {
                 freq[fruits[left]]--;
                 if (freq[fruits[left]] == 0) {
@@ -21,9 +19,7 @@ public:
                 left++;
             }
 
-            // update answer
             maxlen = max(maxlen, right - left + 1);
-
             right++;
         }
 
