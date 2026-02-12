@@ -6,19 +6,18 @@ public:
         int right = 0;
         int maxlen = 0;
 
-        unordered_set<char> st; // 🔑 hash tracking
+        unordered_map<char, int> lastIndex;
 
         while (right < n) {
-            // If duplicate found, shrink window
-            while (st.count(s[right])) {
-                st.erase(s[left]);
-                left++;
+            // if character already seen inside current window
+            if (lastIndex.count(s[right]) && lastIndex[s[right]] >= left) {
+                left = lastIndex[s[right]] + 1;
             }
 
-            // Add current character
-            st.insert(s[right]);
+            // update last seen index
+            lastIndex[s[right]] = right;
 
-            // Update answer
+            // update answer
             maxlen = max(maxlen, right - left + 1);
 
             right++;
