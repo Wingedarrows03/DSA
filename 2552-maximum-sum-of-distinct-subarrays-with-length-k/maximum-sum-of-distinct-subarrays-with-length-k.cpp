@@ -7,31 +7,36 @@ public:
         long long sum = 0;
         long long maxsum = 0;
 
-        unordered_map<int, int> freq;
+        unordered_map<int,int> mp;
 
-        while (right < n) {
-            // expand window
+        while( right < k){
             sum += nums[right];
-            freq[nums[right]]++;
-
-            // shrink window if size exceeds k
-            while (right - left + 1 > k) {
-                sum -= nums[left];
-                freq[nums[left]]--;
-                if (freq[nums[left]] == 0) {
-                    freq.erase(nums[left]);
-                }
-                left++;
+            mp[nums[right]] ++;
+            right ++;
+            if ( mp.size() == k){
+                maxsum = sum;
             }
-
-            // valid window: size == k and all elements distinct
-            if (right - left + 1 == k && freq.size() == k) {
-                maxsum = max(maxsum, sum);
-            }
-
-            right++;
         }
 
+        while( right < n){
+            sum += nums[right];
+            mp[nums[right]] ++;
+
+            sum -= nums[left];
+            mp[nums[left]] --;
+
+            if(mp[nums[left]] == 0){
+                mp.erase(nums[left]);
+            }
+
+            right ++;
+            left ++;
+
+            if(mp.size() == k){
+                maxsum = max(sum,maxsum);
+            }
+
+        }
         return maxsum;
     }
 };
