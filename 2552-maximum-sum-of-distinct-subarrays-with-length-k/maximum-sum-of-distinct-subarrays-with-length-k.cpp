@@ -4,39 +4,41 @@ public:
         int n = nums.size();
         int left = 0;
         int right = 0;
-        long long sum = 0;
         long long maxsum = 0;
-
+        long long sum = 0;
         unordered_map<int,int> mp;
 
-        while( right < k){
+        while(right < k){
             sum += nums[right];
-            mp[nums[right]] ++;
+            mp[nums[right]]++;
             right ++;
-            if ( mp.size() == k){
-                maxsum = sum;
+            if(mp.size() == k){
+                maxsum = sum ;
             }
+
         }
 
-        while( right < n){
+        while ( right < n){
             sum += nums[right];
             mp[nums[right]] ++;
+            
 
             sum -= nums[left];
             mp[nums[left]] --;
+            
 
-            if(mp[nums[left]] == 0){
-                mp.erase(nums[left]);
-            }
-
-            right ++;
-            left ++;
-
-            if(mp.size() == k){
-                maxsum = max(sum,maxsum);
-            }
-
+           if(mp[nums[left]] == 0){
+            mp.erase(nums[left]);
+           }
+           
+           right ++;
+           left ++;
+           
+           if(mp.size() == k){
+            maxsum = max(sum,maxsum);
+           }
         }
+
         return maxsum;
     }
 };
