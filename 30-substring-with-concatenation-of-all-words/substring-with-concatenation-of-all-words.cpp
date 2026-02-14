@@ -2,66 +2,68 @@ class Solution {
 public:
     vector<int> findSubstring(string s, vector<string>& words) {
         vector<int> result;
+        
+        if(s.empty() || words.empty()) // edge case 
+        {
+            return result;
+        }
 
-        // Edge case
-        if (s.empty() || words.empty()) return result;
+        int wordcount = words.size(); // total number of words in the array
+        int wordlen = words[0].length(); // letters in each word 
+        int totallen = wordcount * wordlen; // search window
+        int n = s.size(); // total size of s 
 
-        int wordLen = words[0].length();      // length of each word
-        int wordCount = words.size();         // total number of words
-        int totalLen = wordLen * wordCount;   // total length of valid substring
-        int n = s.length();
-
-        // Step 1: Build frequency map of given words
-        unordered_map<string, int> target;
-        for (string &w : words) {
+        unordered_map <string,int> target; // keeps track of the words we have to check with
+        for(string &w: words){
             target[w]++;
         }
 
-        // Step 2: We try all possible alignments (0 to wordLen-1)
-        for (int offset = 0; offset < wordLen; offset++) {
+        //It helps to assess all the possibilities 
+        for(int offset = 0; offset < wordlen ; offset++ ) 
+        {
+            int right = offset; //scout 
+            int left = offset; // anchor
+            int count = 0; // counter 
+            unordered_map<string, int> window; // keep track of current window 
 
-            int left = offset;        // start of sliding window
-            int right = offset;       // end of sliding window
-            int count = 0;            // number of valid words in window
-            unordered_map<string, int> window;  // frequency inside current window
+            while(right + wordlen <= n) //moves in chunk 
+            {
+                string word = s.substr(right, wordlen); //substring extraction of size wordl
+                right += wordlen;//expanding the window
 
-            // Slide window in chunks of wordLen
-            while (right + wordLen <= n) {
+                // IF THE WORD IS VALID
+                if(target.count(word)) // if we find the word
+                {
+                    window[word]++; //its added in window list
+                    count ++;
 
-                // Extract word of size wordLen
-                string word = s.substr(right, wordLen);
-                right += wordLen;  // move right pointer in jumps
-
-                // Case 1: Word is valid (exists in target map)
-                if (target.count(word)) {
-
-                    window[word]++;  // add word to window
-                    count++;
-
-                    // If word frequency exceeds allowed frequency,
-                    // shrink window from left
-                    while (window[word] > target[word]) {
-                        string leftWord = s.substr(left, wordLen);
-                        window[leftWord]--;
-                        left += wordLen;
-                        count--;
+                    while(window[word] > target[word]) //if freq exceeds 
+                    {
+                        string leftword = s.substr(left, wordlen); //substring extraction
+                        window[leftword] --;
+                        left += wordlen; // keep expanding the left pointer (shrinking)
+                        count --;
                     }
 
-                    // If we matched all words
-                    if (count == wordCount) {
+                    if( count == wordcount) //if matches all the words
+                    {
                         result.push_back(left);
                     }
 
-                } 
-                // Case 2: Word not valid → reset window
-                else {
+            
+                }
+                // WORD IS NOT VALID
+                else{
                     window.clear();
                     count = 0;
-                    left = right;   // move left to next position
-                }
-            }
-        }
+                    left = right ;
 
+                }
+
+            }
+            
+
+        }
         return result;
     }
 };
