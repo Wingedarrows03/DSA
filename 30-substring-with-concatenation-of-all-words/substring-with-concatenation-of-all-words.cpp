@@ -2,68 +2,70 @@ class Solution {
 public:
     vector<int> findSubstring(string s, vector<string>& words) {
         vector<int> result;
-        
-        if(s.empty() || words.empty()) // edge case 
-        {
+
+        //1) edge case
+        if (s.empty() || words.empty()) {
             return result;
         }
 
-        int wordcount = words.size(); // total number of words in the array
-        int wordlen = words[0].length(); // letters in each word 
-        int totallen = wordcount * wordlen; // search window
-        int n = s.size(); // total size of s 
+        //2) general declaration
+        int n = s.size();
+        int wordcount = words.size();          // total number of words
+        int wordlen = words[0].length();       // number of letters in each word
+        int total = wordcount * wordlen;       // total window size we are searching for
 
-        unordered_map <string,int> target; // keeps track of the words we have to check with
-        for(string &w: words){
+        //3) Map 1 declaration - works with words vector and provides target frequencies
+        unordered_map<string, int> target;
+        for (string &w : words) {
             target[w]++;
         }
 
-        //It helps to assess all the possibilities 
-        for(int offset = 0; offset < wordlen ; offset++ ) 
-        {
-            int right = offset; //scout 
-            int left = offset; // anchor
-            int count = 0; // counter 
-            unordered_map<string, int> window; // keep track of current window 
+        //4) Offset/pointer declaration (alignment handling)
+        for (int offset = 0; offset < wordlen; offset++) {
 
-            while(right + wordlen <= n) //moves in chunk 
-            {
-                string word = s.substr(right, wordlen); //substring extraction of size wordl
-                right += wordlen;//expanding the window
+            int right = offset;
+            int left = offset;
+            int count = 0;
 
-                // IF THE WORD IS VALID
-                if(target.count(word)) // if we find the word
-                {
-                    window[word]++; //its added in window list
-                    count ++;
+            // map 2 declaration - works with current sliding window
+            unordered_map<string, int> window;
 
-                    while(window[word] > target[word]) //if freq exceeds 
-                    {
-                        string leftword = s.substr(left, wordlen); //substring extraction
-                        window[leftword] --;
-                        left += wordlen; // keep expanding the left pointer (shrinking)
-                        count --;
+            //5) movement in chunks (chunks are decided by wordlen)
+            while (right + wordlen <= n) {
+
+                string word = s.substr(right, wordlen); // substring extraction
+                right += wordlen;                       // move right in chunk
+
+                //5.1) If the word is valid
+                if (target.count(word)) {
+
+                    window[word]++;
+                    count++;
+
+                    //5.2) If frequency exceeds allowed, shrink window from left
+                    while (window[word] > target[word]) {
+                        string leftword = s.substr(left, wordlen);
+                        window[leftword]--;
+                        left += wordlen;
+                        count--;
                     }
 
-                    if( count == wordcount) //if matches all the words
-                    {
+                    //5.3) If we matched all words
+                    if (count == wordcount) {
                         result.push_back(left);
                     }
-
-            
                 }
-                // WORD IS NOT VALID
-                else{
+
+                //5.4) If word is NOT valid → reset window
+                else {
                     window.clear();
                     count = 0;
-                    left = right ;
-
+                    left = right;
                 }
-
             }
-            
-
         }
+
+        //6) return result
         return result;
     }
 };
