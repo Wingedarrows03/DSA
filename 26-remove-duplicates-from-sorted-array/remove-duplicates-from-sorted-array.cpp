@@ -9,7 +9,7 @@ public:
         while ( j < n){
             if (nums[i] != nums[j]){
                 i++; // first pointer will move 
-                nums[i] = nums[j]; 
+                nums[i] = nums[j]; //overwriting step 
     
             }
              j++; // second pointer will move too
