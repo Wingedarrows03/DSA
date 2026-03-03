@@ -2,30 +2,32 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
         int n = nums.size();
-        int left = 0; // for 0s
-        int right = n-1; // for 2s
-        int mid = 0; // scanner
+        int left = 0; // pointers for 0s
+        int right = n - 1; // pointers for 1s
+        int mid = 0; // pointers for scouting 
 
         while(mid <= right){
-            if (nums[mid]== 0){
-                swap(nums[left],nums[mid]);
-                mid ++;
-                left++;
+            // for 0s
+            if ( nums[mid] == 0){
+                swap(nums[left],nums[mid]); // swap it with left
+                left ++; // left will increase
+                mid ++; // mid will increase as well 
             }
 
-            else if(nums[mid]==1){
-                    mid++;
-                }
+            //for 2s
+            else if ( nums[mid] == 2){
+                swap(nums[right],nums[mid]); // swap the mid with right
+                right --;
+                
+            }
 
+            //for 1s
             else{
-                    swap(nums[right],nums[mid]);
-                    right --;
+                mid ++;
+            }
 
-                }
-
-            
 
         }
-
+        
     }
 };
