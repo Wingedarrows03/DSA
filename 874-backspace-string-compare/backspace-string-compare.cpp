@@ -1,56 +1,53 @@
 class Solution {
 public:
     bool backspaceCompare(string s, string t) {
-        int n1 = s.size();
-        int n2 = t.size();
 
-        int i = n1 - 1;   // pointer for s
-        int skip1 = 0;    // skipper counter for s
+        int i = s.size() - 1;
+        int j = t.size() - 1;
 
-        int j = n2 - 1;   // pointer for t
-        int skip2 = 0;    // skipper counter for t
+        int cnti = 0;
+        int cntj = 0;
 
-        while (i >= 0 || j >= 0) {
+        while(i >= 0 || j >= 0){
 
-            // process string s
-            while (i >= 0) {
-                if (s[i] == '#') {
-                    skip1++;
+            // process s
+            while(i >= 0){
+                if(s[i] == '#'){
+                    cnti++;
                     i--;
                 }
-                else if (skip1 > 0) {
-                    skip1--;
+                else if(cnti > 0){
+                    cnti--;
                     i--;
                 }
-                else {
+                else{
                     break;
                 }
             }
 
-            // process string t
-            while (j >= 0) {
-                if (t[j] == '#') {
-                    skip2++;
+            // process t
+            while(j >= 0){
+                if(t[j] == '#'){
+                    cntj++;
                     j--;
                 }
-                else if (skip2 > 0) {
-                    skip2--;
+                else if(cntj > 0){
+                    cntj--;
                     j--;
                 }
-                else {
+                else{
                     break;
                 }
             }
 
-            // compare current valid characters
-            if (i >= 0 && j >= 0) {
-                if (s[i] != t[j]) return false;
+            // compare characters
+            if(i >= 0 && j >= 0){
+                if(s[i] != t[j]) return false;
             }
-            else {
-                if (i >= 0 || j >= 0) return false;
+            else if(i >= 0 || j >= 0){
+                return false;
             }
 
-            // move both pointers
             i--;
             j--;
         }
