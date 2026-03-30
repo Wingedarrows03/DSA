@@ -2,41 +2,36 @@ class Solution {
 public:
     int findUnsortedSubarray(vector<int>& nums) {
         int n = nums.size();
-        int left = 0;
-        int right = n - 1;
+        int maxval = INT_MIN; //stores maxvalue
+        int minval = INT_MAX; //stores minimum value
 
-        
-        while (left < n - 1 && nums[left] <= nums[left + 1]) {
-            left++;
+        int start = -1; //placeholder value to meet the formula
+        int end = -2; //placeholder value to meet the formula 
+
+        int left = 0; //left pointer 
+        int right  = n-1; //right pointer 
+
+        //finding the rightmost out of order element (left - right)
+        while(left <= n-1){
+            if(nums[left]<maxval){
+                end = left;// end of the subarray
+            }
+            else{
+              maxval = nums[left]; // new max val will be found 
+            }
+            left ++;
         }
 
-        
-        if (left == n - 1) return 0;
-
-        
-        while (right > 0 && nums[right] >= nums[right - 1]) {
-            right--;
+        //finding the leftmost out of order element (right - left)
+        while(right >= 0){
+            if(nums[right]>minval){
+                start = right; //start of the subarray
+            }
+            else{
+                minval = nums[right]; // new min value
+            }
+            right --;
         }
-
-        
-        int subMin = nums[left];
-        int subMax = nums[left];
-        for (int i = left; i <= right; i++) {
-            subMin = min(subMin, nums[i]);
-            subMax = max(subMax, nums[i]);
-        }
-
-        
-        while (left > 0 && nums[left - 1] > subMin) {
-            left--;
-        }
-
-        
-        while (right < n - 1 && nums[right + 1] < subMax) {
-            right++;
-        }
-
-        
-        return right - left + 1;
+        return end - start + 1; // final answer
     }
 };
