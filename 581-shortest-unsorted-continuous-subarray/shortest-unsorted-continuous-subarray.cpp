@@ -17,7 +17,7 @@ public:
                 end = left;// end of the subarray
             }
             else{
-              maxval = nums[left]; // new max val will be found 
+              maxval = nums[left]; // update the max value 
             }
             left ++;
         }
@@ -28,7 +28,7 @@ public:
                 start = right; //start of the subarray
             }
             else{
-                minval = nums[right]; // new min value
+                minval = nums[right]; // update the min value
             }
             right --;
         }
