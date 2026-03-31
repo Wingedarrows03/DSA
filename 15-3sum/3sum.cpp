@@ -33,7 +33,7 @@ public:
                 else{
                     result.push_back({nums[i],nums[left],nums[right]});
 
-                //handeling duplicates for left & right pointers
+                //handeling duplicates for left & right pointers (looking ahead)
                 //using internal breaks
                 while(left < right && nums[right] == nums[right-1]){
                     right --;
