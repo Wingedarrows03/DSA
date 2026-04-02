@@ -18,7 +18,7 @@ public:
             while(sum >= target){
                 minlen = min(minlen, right - left + 1); //finding the minimum
                 sum -= nums[left]; // removing the oldest number 
-                left ++;
+                left ++; // left pointer will move 
             }
 
             
