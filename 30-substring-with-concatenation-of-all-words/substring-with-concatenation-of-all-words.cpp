@@ -1,71 +1,68 @@
 class Solution {
 public:
     vector<int> findSubstring(string s, vector<string>& words) {
-        vector<int> result;
 
-        //1) edge case
-        if (s.empty() || words.empty()) {
+        vector<int> result; // result will be stored here 
+
+        //edge case - 1
+        if(s.size() == 0 || words.size() == 0){
             return result;
         }
 
-        //2) general declaration
-        int n = s.size();
-        int wordcount = words.size();          // total number of words
-        int wordlen = words[0].length();       // number of letters in each word
-        int total = wordcount * wordlen;       // total window size we are searching for
+        //general decleration
+        int n = s.size(); // size of string
+        int wordsize = words.size(); // size of words (L)
+        int wordlength = words[0].size(); // length of each word 
+        int k = wordsize * wordlength; // window of the problem
 
-        //3) Map 1 declaration - works with words vector and provides target frequencies
+        //Map decleration - 1 ( area of operation - words)
         unordered_map<string, int> target;
-        for (string &w : words) {
-            target[w]++;
+        for(int i = 0; i < wordsize; i++){
+            string w = words[i];
+            target[w]++; // building the target frequency map
         }
 
-        //4) Offset/pointer declaration (alignment handling)
-        for (int offset = 0; offset < wordlen; offset++) {
+        //pointer decleration (area of operation - s)
+        for (int pointer = 0; pointer < wordlength; pointer ++){
+            int left = pointer; //left pointer 
+            int right = pointer; //right pointer 
+            int cnt = 0; //counter for valid words found
 
-            int right = offset;
-            int left = offset;
-            int count = 0;
+            //Map decleration - 2 (area of operation - s)
+            unordered_map<string, int> seen;
 
-            // map 2 declaration - works with current sliding window
-            unordered_map<string, int> window;
+            // movement in chunks 
+            while(right + wordlength <= n){
+                string word = s.substr(right, wordlength); // cutting each chunk
+                right += wordlength; // expansion of right pointer in chunk
 
-            //5) movement in chunks (chunks are decided by wordlen)
-            while (right + wordlen <= n) {
+                // if word hits the target 
+                if(target.count(word)){
+                    seen[word]++; // adding found word to current window map
+                    cnt++; // incrementing the valid word count
 
-                string word = s.substr(right, wordlen); // substring extraction
-                right += wordlen;                       // move right in chunk
-
-                //5.1) If the word is valid
-                if (target.count(word)) {
-
-                    window[word]++;
-                    count++;
-
-                    //5.2) If frequency exceeds allowed, shrink window from left
-                    while (window[word] > target[word]) {
-                        string leftword = s.substr(left, wordlen);
-                        window[leftword]--;
-                        left += wordlen;
-                        count--;
+                    // frequency allowed exceeds
+                    while (seen[word] > target[word]){
+                        string leftword = s.substr(left, wordlength); // identifying the oldest word
+                        seen[leftword]--; // removing it from current map
+                        cnt--; // decrementing the valid word count
+                        left += wordlength; // shrinking from the left in chunks
                     }
 
-                    //5.3) If we matched all words
-                    if (count == wordcount) {
-                        result.push_back(left);
+                    // window matches target size
+                    if(cnt == wordsize){
+                        result.push_back(left); // recording the starting index
                     }
                 }
-
-                //5.4) If word is NOT valid → reset window
                 else {
-                    window.clear();
-                    count = 0;
-                    left = right;
+                    // reset case: hit a word not in target
+                    seen.clear(); // clearing the current window map
+                    cnt = 0; // resetting the valid word count
+                    left = right; // jumping left pointer to the new start
                 }
             }
         }
-
-        //6) return result
-        return result;
+        
+        return result; // returning the final list of indices
     }
 };
