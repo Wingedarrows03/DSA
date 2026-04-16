@@ -1,41 +1,46 @@
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        int n = s.size(); 
-        int m = p.size();
-        vector<int> result; //push my result here 
+        int n1 = s.size(); // size of string s
+        int n2 = p.size(); // size of string p 
 
-        if(m > n) return result; // edge case handelling 
+        //result storing vector
+        vector<int> result;
 
-        //freq map of m 
-        vector<int> target(26,0); // target freq map
-        for(char c : p){
-            target[c - 'a']++; //ASCII 
+        //edge case- 1
+        if(n2 > n1) return result;
+
+        // freq map for p (the master list)
+        vector <int> target(26,0);
+        for(char c : p) //range loop
+        {
+            target[c - 'a']++; // ASCII char c - 97
         }
 
-        //freq map of n 
-        vector<int> window(26,0); // active window freq map 
-        int right = 0; //scouting pointer 
-        int left = 0; //anchor pointer / reducing pointer 
+        //freq map for s (siliding wndow)
+        vector <int> window(26,0);
+        int right = 0; // right pointer (scout)
+        int left = 0; // left pointer (anchor)
 
-        while(right < n){
-            window[s[right] - 'a']++;
+        for(right = 0;  right < n1; right ++){
+            window[s[right] - 'a']++; 
 
-            // window size exceeds m
-            if( right - left + 1 > m){
-                window[s[left] - 'a']--; 
+            // window size exceeds the p.size
+            if (right - left + 1 > n2){
+                window[s[left] - 'a']--; // oldest input getting discarded
                 left ++;
             }
 
-            //window size meets the m
-            if( right - left + 1 == m){
-                if(window == target ){
+            // window size meets p.size
+            if (right - left + 1 == n2){
+                if(window == target){
                     result.push_back(left);
                 }
             }
-            right ++;
+
+            
+
         }
         return result;
-
     }
 };
