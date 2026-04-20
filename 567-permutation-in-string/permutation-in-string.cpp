@@ -10,7 +10,7 @@ public:
         // freq map for s1 (master list)
         vector<int> target(26,0); 
         for(char c: s1){
-            target [c - 'a']++; // ASCII Value
+            target [c - 'a']++; // ASCII Value of 'a' is 97
         }
 
         //freq map for s2 (window list)
